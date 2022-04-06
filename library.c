@@ -1,7 +1,5 @@
 #include "library.h"
 
-/*** *** *** ERROR HANDLING *** *** *** *** *** *** ***/
-
 void errorHandler(const char *errorMsg) {
     char finalMsg[ERROR_MSG] = {0};
     strcat(finalMsg,errorMsg);
@@ -9,9 +7,6 @@ void errorHandler(const char *errorMsg) {
     perror(finalMsg);
     exit(EXIT_FAILURE);
 }
-
-
-/*** *** *** SEMAHPHORE HANDLING *** *** *** *** *** *** ***/
 
 sem_t * semOpen(const char *name, int oflag, mode_t mode, unsigned int value){
     sem_t * sem;
@@ -45,9 +40,6 @@ void semUnlink() {
         errorHandler("Error unlinking semaphore");
     }
 }
-
-
-/*** *** *** SHARED MEMORY HANDLING *** *** *** *** *** *** ***/
 
 int openSM(const char* name, int oflag, mode_t mode){
     int fd;

@@ -3,8 +3,8 @@
 
 #include "library.h"
 
-#define SLAVE_AMOUNT 8
-#define SLAVE_PATH "./Slave"
+#define SLAVE_NUM 8
+#define SLAVE_PATH "./slave"
 
 typedef struct {
     pid_t pid;

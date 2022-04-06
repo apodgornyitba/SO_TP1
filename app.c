@@ -3,15 +3,12 @@
 int main(int argc, char *argv[]) {
 
     if (argc < 2) {
-        errorHandler("Error: incorrect amount of arguments (app)");
+        errorHandler("Error: incorrect amount of arguments");
     }
 
-     /* If I have less arguments than SLAVE_AMOUNT, I create
-    ** as many children as arguments, since I do not want more children than arguments
-    */
-    int taskNum = argc - 1; //cant de archivos
-    int slaveNum =  MIN(SLAVE_AMOUNT,taskNum); // cant de procesos esclavos
-    int filesPerSlave = (taskNum > SLAVE_AMOUNT * 2)? 2 : 1; //cant de archivos que se le asignan a cada proceso esclavo
+    int taskNum = argc - 1; // Cantidad de archivos
+    int slaveNum =  MIN(SLAVE_NUM,taskNum); // Cantidad de procesos esclavos
+    int filesPerSlave = (taskNum > SLAVE_NUM * 2)? 2 : 1; //Cant de archivos que se le asignan a cada proceso esclavo
 
     slave slavesArray[slaveNum];
 
@@ -23,11 +20,7 @@ void createSlave(slave slavesArray[], int slaveNum, char *path, char *const argv
     pid_t pid;
 
     for (int i = 0; i < slaveNum; i++) {
-        // creo los pipes
-        // fdMasterToSlave va de master a esclavo
-        // fdSlaveToMaster va de esclavo a maestro
-
-       // le creo fd nuevos a cada esclavo
+       // Creo dos pipes para cada proceso esclavo
         int fdMasterToSlave[2], fdSlaveToMaster[2];
 
         if (pipe(fdMasterToSlave) == ERROR_CODE || pipe(fdSlaveToMaster) == ERROR_CODE) {
@@ -81,4 +74,3 @@ void killSlave(slave slavesArray[], int slaveNum) {
 
     }
 }
-
