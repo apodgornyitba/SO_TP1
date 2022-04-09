@@ -47,6 +47,7 @@ void semUnlink();
 void createSM(void * shMemory, off_t sizeSM, int * smFd);
 void unmapSM(void *, int );
 void unlinkSM();
+int openSM(const char* name, int oflag, mode_t mode);
 
 void setBuffer(FILE * ,size_t );
 

@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     sleep(2); //Espera de 2 segundos por el proceso vista
 
     createSlave(slavesArray, slaveNum, SLAVE_PATH, argv);
-    killSlave(slavesArray, slaveNum);
+    endApp(outpFile, slavesArray, slaveNum, sem, smFd, shMemCopy, sizeSM);
 }
 
 void createSlave(slave slavesArray[], int slaveNum, char *path, char *const argv[]) {
@@ -186,4 +186,20 @@ void sendFiles(int slaveNum,int filesPerSlave, slave *slavesArray, char ** argv,
         }
 
     }
+}
+
+void endApp(FILE * file, slave *slavesArray, int slaveNum, sem_t * sem, int smFd, void * mem, int sizeSM) {
+
+    if (fclose(file) != 0) {
+        errorHandler("Error closing result file in main (app)");
+    }
+
+    killSlave(slavesArray, slaveNum);
+
+    semClose(sem);
+    semUnlink();
+
+    close(smFd);
+    unmapSM(mem,sizeSM);
+    unlinkSM();
 }

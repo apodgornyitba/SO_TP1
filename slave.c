@@ -2,6 +2,7 @@
 
 int main(int argc, const char *argv[]) {
 
+    setBuffer(stdout,0);
     char *fileName = NULL;
     size_t fileSize = 0;
 
