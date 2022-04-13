@@ -80,5 +80,6 @@ int openSM(const char* name, int oflag, mode_t mode){
     int fd;
     if ((fd = shm_open(name, oflag, mode)) == ERROR_CODE) {
         errorHandler("Error opening shared memory (app)");
-return fd;
+    }
+    return fd;
 }

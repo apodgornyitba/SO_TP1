@@ -16,5 +16,6 @@ typedef struct {
 void createSlave(slave slavesArray[], int slaveAmount, char *path, char *const argv[]);
 void sendFiles(int slaveNum,int filesPerSlave, slave *slavesArray, char ** argv, int taskNum, void * shMemory, FILE * outpFile,sem_t *sem);
 void killSlave(slave slavesArray[], int slaveAmount);
+void endApp(FILE * file, slave *slavesArray, int slaveNum, sem_t * sem, int smFd, void * mem, int sizeSM);
 
 #endif

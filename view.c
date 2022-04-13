@@ -1,4 +1,5 @@
-#include "view.h"
+#include "library.h"
+#define MEM_LEN 50
 
 int main(int argc, char *argv[]) {
 
@@ -43,17 +44,17 @@ int main(int argc, char *argv[]) {
 
     while(i < smSize) {
 
-        waitSemaphore(sem);
+        semWait(sem);
 
         printf("%s", shMemory);
         shMemory += JUMP;
         i += JUMP;
     }
 
-    closeSemaphore(sem);
+    semClose(sem);
     close(smFd);
 
-    unmapSharedMemory(shMemory,smSize);
+    unmapSM(shMemory,smSize);
 
     return 0;
 }

@@ -23,18 +23,19 @@ int main(int argc, char *argv[]) {
     }
     setBuffer(stdout,BUFFER_SIZE);
 
-    createSM(shMemory, sizeSM, smFd);
+    createSM(shMemory, sizeSM, &smFd);
 
     shMemCopy = shMemory;
 
     sem_t *sem;
-    sem = (semOpen(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM) == SEM_FAILED);
+    sem = semOpen(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM);
 
     printf("%d\n", (int)sizeSM);
 
     sleep(2); //Espera de 2 segundos por el proceso vista
 
     createSlave(slavesArray, slaveNum, SLAVE_PATH, argv);
+    sendFiles(slaveNum, filesPerSlave, slavesArray, argv, taskNum, shMemory, outpFile, sem);
     endApp(outpFile, slavesArray, slaveNum, sem, smFd, shMemCopy, sizeSM);
 }
 
@@ -165,7 +166,7 @@ void sendFiles(int slaveNum,int filesPerSlave, slave *slavesArray, char ** argv,
                         errorHandler("Error performing sprintf while sending files");
                     }
                     shMemory += JUMP;
-                    postSemaphore(sem);
+                    semPost(sem);
 
                 }
 
