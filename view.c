@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 
         semWait(sem);
 
-        printf("%s", shMemory);
+        printf("%s", (char *) shMemory);
         shMemory += JUMP;
         i += JUMP;
     }
