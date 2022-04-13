@@ -19,16 +19,32 @@ int main(int argc, char *argv[]) {
 
     FILE *outpFile = fopen("result.txt", "w");
     if (outpFile == NULL) {
-        errorHandler("Error opening result file (app)");
+        errorHandler("Error opening result file");
     }
     setBuffer(stdout,BUFFER_SIZE);
 
-    createSM(shMemory, sizeSM, &smFd);
+//    createSM(shMemory, sizeSM, &smFd);
+
+    if ((smFd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == ERROR_CODE) {
+        errorHandler("Error opening shared memory");
+    }
+
+    if (ftruncate(smFd, sizeSM) == ERROR_CODE) {
+        errorHandler("Error setting size to shared memory");
+    }
+
+    shMemory = mmap(NULL, sizeSM, PROT_WRITE, MAP_SHARED, smFd, 0);
+    if (shMemory == MAP_FAILED) {
+        errorHandler("Error mapping shared memory");
+    }
 
     shMemCopy = shMemory;
 
     sem_t *sem;
-    sem = semOpen(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM);
+//    sem = semOpen(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM);
+    if ((sem = sem_open(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM)) == SEM_FAILED) {
+        errorHandler("Error opening semaphore");
+    }
 
     printf("%d\n", (int)sizeSM);
 

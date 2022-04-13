@@ -8,13 +8,13 @@ void errorHandler(const char *errorMsg) {
     exit(EXIT_FAILURE);
 }
 
-sem_t * semOpen(const char *name, int oflag, mode_t mode, unsigned int value){
+/*sem_t * semOpen(const char *name, int oflag, mode_t mode, unsigned int value){
     sem_t * sem;
     if ((sem = sem_open(name, oflag, mode, value)) == SEM_FAILED) {
         errorHandler("Error opening semaphore (app)");
     }
     return sem;
-}
+}*/
 
 void semPost(sem_t *sem) {
     if(sem_post(sem) == ERROR_CODE) {
@@ -41,7 +41,7 @@ void semUnlink() {
     }
 }
 
-void createSM(void * shMemory, off_t sizeSM, int * smFd){
+/*void createSM(void * shMemory, off_t sizeSM, int * smFd){
 
     if ((smFd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == ERROR_CODE) {
         errorHandler("Error opening shared memory");
@@ -55,14 +55,13 @@ void createSM(void * shMemory, off_t sizeSM, int * smFd){
     if (shMemory == MAP_FAILED) {
         errorHandler("Error mapping shared memory");
     }
-}
+}*/
 
 void unmapSM(void * memory, int size) {
     if(munmap( memory,size) == ERROR_CODE) {
         errorHandler("Error unmapping shared memory");
     }
 }
-
 
 void unlinkSM() {
     if(shm_unlink(SHM_NAME)==ERROR_CODE) {
@@ -76,10 +75,10 @@ void setBuffer(FILE * stream,size_t size) {
     }
 }
 
-int openSM(const char* name, int oflag, mode_t mode){
+/*int openSM(const char* name, int oflag, mode_t mode){
     int fd;
     if ((fd = shm_open(name, oflag, mode)) == ERROR_CODE) {
         errorHandler("Error opening shared memory (app)");
     }
     return fd;
-}
+}*/

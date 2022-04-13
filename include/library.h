@@ -38,16 +38,16 @@
 
 void errorHandler(const char *);
 
-sem_t * semOpen(const char *name, int oflag, mode_t mode, unsigned int value);
+//sem_t * semOpen(const char *name, int oflag, mode_t mode, unsigned int value);
 void semPost(sem_t *);
 void semWait(sem_t *);
 void semClose(sem_t *);
 void semUnlink();
 
-void createSM(void * shMemory, off_t sizeSM, int * smFd);
+//void createSM(void * shMemory, off_t sizeSM, int * smFd);
 void unmapSM(void *, int );
 void unlinkSM();
-int openSM(const char* name, int oflag, mode_t mode);
+//int openSM(const char* name, int oflag, mode_t mode);
 
 void setBuffer(FILE * ,size_t );
 
