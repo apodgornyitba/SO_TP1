@@ -12,7 +12,7 @@ void errorHandler(const char *errorMsg) {
 
 void semOpen(const char *name, int oflag, mode_t mode, unsigned int value, sem_t ** sem){
     if ((*sem = sem_open(name, oflag, mode, value)) == SEM_FAILED) {
-        errorHandler("Error opening semaphore (app)");
+        errorHandler("Error opening semaphore");
     }
 }
 
@@ -59,7 +59,7 @@ void createSM(void ** shMemory, off_t sizeSM, int * smFd){
 
 void openSM(const char* name, int oflag, mode_t mode, int * smFd){
     if ((*smFd = shm_open(name, oflag, mode)) == ERROR_CODE) {
-        errorHandler("Error opening shared memory (app)");
+        errorHandler("Error opening shared memory");
     }
 }
 

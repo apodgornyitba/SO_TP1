@@ -155,7 +155,7 @@ void sendFiles(int slaveNum,int filesPerSlave, slave *slavesArray, char ** argv,
             if(FD_ISSET(fd, &readFdSet)) {
                 
                 //Recibo un archivo
-                int dimRead = read(fd, buffer, BUFFER_SIZE-1);
+                int dimRead = read(fd, buffer, BUFFER_SIZE);
                 if (dimRead == ERROR_CODE) {
                     errorHandler("Error reading from fdData");
                 } else if (dimRead <= 0) {
@@ -166,7 +166,7 @@ void sendFiles(int slaveNum,int filesPerSlave, slave *slavesArray, char ** argv,
                     //Escribo el resultado en result.txt
                     fprintf(outpFile, "%s\n", buffer);
                     slavesArray[i].fileNum--;
-                    buffer[dimRead + 1] = '\0';
+                    buffer[dimRead - 1] = '\0';
 
                     //Envio respuesta al view
                     if (sprintf((char*)(shMemory), "%s\n", buffer) == ERROR_CODE) {
