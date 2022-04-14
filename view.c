@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "library.h"
 #define MEM_LEN 50
 
@@ -30,20 +32,11 @@ int main(int argc, char *argv[]) {
     void * shMemory;
     sem_t * sem;
 
-//    smFd = openSM(SHM_NAME, O_RDWR, 0666);
+    openSM(SHM_NAME, O_RDWR, 0666, &smFd);
 
-    if((smFd = shm_open(SHM_NAME, O_RDWR, 0666)) == ERROR_CODE) {
-        errorHandler("Error opening shared memory");
-    }
+    mmapSM(NULL, smSize, PROT_READ, MAP_SHARED, smFd, 0, &shMemory);
 
-    if((shMemory = mmap(NULL, smSize, PROT_READ, MAP_SHARED, smFd, 0)) == MAP_FAILED) {
-        errorHandler("Error mapping shared memory");
-    }
-
-//    sem = semOpen(SEM_NAME, O_CREAT, 0600, INIT_VAL_SEM);
-    if ((sem = sem_open(SEM_NAME, O_CREAT, 0600, INIT_VAL_SEM)) == SEM_FAILED) {
-        errorHandler("Error opening semaphore");
-    }
+    semOpen(SEM_NAME, O_CREAT, 0600, INIT_VAL_SEM, &sem);
     
     void *smCopy = shMemory;
 

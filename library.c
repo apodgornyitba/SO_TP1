@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "library.h"
 
 void errorHandler(const char *errorMsg) {
@@ -8,13 +10,11 @@ void errorHandler(const char *errorMsg) {
     exit(EXIT_FAILURE);
 }
 
-/*sem_t * semOpen(const char *name, int oflag, mode_t mode, unsigned int value){
-    sem_t * sem;
-    if ((sem = sem_open(name, oflag, mode, value)) == SEM_FAILED) {
+void semOpen(const char *name, int oflag, mode_t mode, unsigned int value, sem_t ** sem){
+    if ((*sem = sem_open(name, oflag, mode, value)) == SEM_FAILED) {
         errorHandler("Error opening semaphore (app)");
     }
-    return sem;
-}*/
+}
 
 void semPost(sem_t *sem) {
     if(sem_post(sem) == ERROR_CODE) {
@@ -41,21 +41,34 @@ void semUnlink() {
     }
 }
 
-/*void createSM(void * shMemory, off_t sizeSM, int * smFd){
+void createSM(void ** shMemory, off_t sizeSM, int * smFd){
 
-    if ((smFd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == ERROR_CODE) {
+    if ((*smFd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == ERROR_CODE) {
         errorHandler("Error opening shared memory");
     }
 
-    if (ftruncate(smFd, sizeSM) == ERROR_CODE) {
+    if (ftruncate(*smFd, sizeSM) == ERROR_CODE) {
         errorHandler("Error setting size to shared memory");
     }
 
-    shMemory = mmap(NULL, sizeSM, PROT_WRITE, MAP_SHARED, smFd, 0);
-    if (shMemory == MAP_FAILED) {
+    *shMemory = mmap(NULL, sizeSM, PROT_WRITE, MAP_SHARED, *smFd, 0);
+    if (*shMemory == MAP_FAILED) {
         errorHandler("Error mapping shared memory");
     }
-}*/
+}
+
+void openSM(const char* name, int oflag, mode_t mode, int * smFd){
+    if ((*smFd = shm_open(name, oflag, mode)) == ERROR_CODE) {
+        errorHandler("Error opening shared memory (app)");
+    }
+}
+
+void mmapSM(void * addr, size_t smSize, int prot, int flags, int smFd, off_t offset, void ** shMemory){
+    *shMemory = mmap(NULL, smSize, PROT_READ, MAP_SHARED, smFd, 0);
+    if(*shMemory == MAP_FAILED) {
+        errorHandler("Error mapping shared memory");
+    }
+}
 
 void unmapSM(void * memory, int size) {
     if(munmap( memory,size) == ERROR_CODE) {
@@ -75,10 +88,3 @@ void setBuffer(FILE * stream,size_t size) {
     }
 }
 
-/*int openSM(const char* name, int oflag, mode_t mode){
-    int fd;
-    if ((fd = shm_open(name, oflag, mode)) == ERROR_CODE) {
-        errorHandler("Error opening shared memory (app)");
-    }
-    return fd;
-}*/

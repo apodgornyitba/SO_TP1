@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "slave.h"
 
 int main(int argc, const char *argv[]) {
@@ -21,7 +23,7 @@ int main(int argc, const char *argv[]) {
         }
 
         char input[BUFFER_SIZE/2]={0};
-        fread(input,sizeof(char),BUFFER_SIZE-1,fd);
+        fread(input,sizeof(char),(BUFFER_SIZE/2)-1,fd);
 
         char output[BUFFER_SIZE];
         sprintf(output,"PID: %d\nFile: %s\n%s\n",getpid(),fileName,input);
@@ -31,5 +33,6 @@ int main(int argc, const char *argv[]) {
             errorHandler("Error performing pclose in function solver (slave)");
         }
     }
+    return 0;
 
 }

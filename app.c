@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "app.h"
 
 int main(int argc, char *argv[]) {
@@ -23,28 +25,15 @@ int main(int argc, char *argv[]) {
     }
     setBuffer(stdout,BUFFER_SIZE);
 
-//    createSM(shMemory, sizeSM, &smFd);
-
-    if ((smFd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == ERROR_CODE) {
-        errorHandler("Error opening shared memory");
-    }
-
-    if (ftruncate(smFd, sizeSM) == ERROR_CODE) {
-        errorHandler("Error setting size to shared memory");
-    }
-
-    shMemory = mmap(NULL, sizeSM, PROT_WRITE, MAP_SHARED, smFd, 0);
-    if (shMemory == MAP_FAILED) {
-        errorHandler("Error mapping shared memory");
-    }
+    createSM(&shMemory, sizeSM, &smFd);
 
     shMemCopy = shMemory;
 
+    //semUnlink();
+
     sem_t *sem;
-//    sem = semOpen(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM);
-    if ((sem = sem_open(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM)) == SEM_FAILED) {
-        errorHandler("Error opening semaphore");
-    }
+    semOpen(SEM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, INIT_VAL_SEM, &sem);
+    
 
     printf("%d\n", (int)sizeSM);
 
@@ -53,6 +42,8 @@ int main(int argc, char *argv[]) {
     createSlave(slavesArray, slaveNum, SLAVE_PATH, argv);
     sendFiles(slaveNum, filesPerSlave, slavesArray, argv, taskNum, shMemory, outpFile, sem);
     endApp(outpFile, slavesArray, slaveNum, sem, smFd, shMemCopy, sizeSM);
+
+    return 0;
 }
 
 void createSlave(slave slavesArray[], int slaveNum, char *path, char *const argv[]) {
@@ -164,7 +155,7 @@ void sendFiles(int slaveNum,int filesPerSlave, slave *slavesArray, char ** argv,
             if(FD_ISSET(fd, &readFdSet)) {
                 
                 //Recibo un archivo
-                int dimRead = read(fd, buffer, BUFFER_SIZE);
+                int dimRead = read(fd, buffer, BUFFER_SIZE-1);
                 if (dimRead == ERROR_CODE) {
                     errorHandler("Error reading from fdData");
                 } else if (dimRead <= 0) {
