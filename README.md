@@ -23,8 +23,8 @@ El programa master guardará todos los resultados en un archivo, sin necesidad d
 
 donde ./files/* representa un file path. Adicionalmente, se puede ejecutar el proceso view, que se encargará de imprimir por salida estándar los resultados, de la siguiente manera:
 
-    $ ./view <MEMORY_SIZE>
+    $ ./view <memorySize>
  
-donde el valor <MEMORY_SIZE> será indicado por salida estándar al ejecutar el proceso master. Para ello, se cuenta con 2 segundos de espera. Para iniciar ambos procesos a la vez, ejecutar lo siguiente:
+donde el valor <memorySize> será indicado por salida estándar al ejecutar el proceso master. Para ello, se cuenta con 2 segundos de espera. Para iniciar ambos procesos a la vez, ejecutar lo siguiente:
 
     $ ./app ./files/* | ./view
