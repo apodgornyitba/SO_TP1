@@ -28,3 +28,9 @@ donde ./files/* representa un file path. Adicionalmente, se puede ejecutar el pr
 donde el valor <memorySize> será indicado por salida estándar al ejecutar el proceso master. Para ello, se cuenta con 2 segundos de espera. Para iniciar ambos procesos a la vez, ejecutar lo siguiente:
 
     $ ./app ./files/* | ./view
+
+## Instrucciones de Limpieza
+Ubicado dentro del directorio donde se descargaron los archivos, para borrar todos los archivos ejecutables generados y el archivo resultado ejecutar el comando:
+    
+    $ make clean
+    
