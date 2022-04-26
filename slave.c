@@ -23,15 +23,20 @@ int main(int argc, const char *argv[]) {
         }
 
         char input[BUFFER_SIZE/2]={0};
+
         fread(input,sizeof(char),(BUFFER_SIZE/2)-1,fd);
 
         char output[BUFFER_SIZE];
         sprintf(output,"PID: %d\nFile: %s\n%s\n",getpid(),fileName,input);
         write(WRITE_FD,output,strlen(output)+1);
 
+        int fd2 = open("nPipe", 0_WRONLY);
+        write(fd2, output, strlen(output)+1);
+
         if(pclose(fd) == ERROR_CODE) {
             errorHandler("Error performing pclose in function solver (slave)");
         }
+
     }
     return 0;
 

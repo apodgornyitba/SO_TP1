@@ -39,11 +39,19 @@ int main(int argc, char *argv[]) {
 
     sleep(2); //Espera de 2 segundos por el proceso vista
 
+    createNamedPipe();
+
     createSlave(slavesArray, slaveNum, SLAVE_PATH, argv);
     sendFiles(slaveNum, filesPerSlave, slavesArray, argv, taskNum, shMemory, outpFile, sem);
     endApp(outpFile, slavesArray, slaveNum, sem, smFd, shMemCopy, sizeSM);
 
     return 0;
+}
+
+void createNamedPipe () {
+    if ( mkfifo( "nPipe", 0666) == ERROR_CODE) {
+        errorHanlder("...");
+    }
 }
 
 void createSlave(slave slavesArray[], int slaveNum, char *path, char *const argv[]) {
